@@ -11,20 +11,22 @@ jobs:
           run: echo "Clone the code from github"
 
   build:
+    needs: [code]
     runs-on: ubuntu-latest
     steps:
         - name: Build docker container
           run: echo "docker build -t nginx file_path"
 
   test:
+    needs: [build] 
     runs-on: ubuntu-latest
     steps:
         - name: Test the docker container locally
           run: echo "testing..."
 
   deploy:
+    needs: [build,test]
     runs-on: ubuntu-latest
     steps:
         - name: Deploy the App
           run: echo "docker compose deploying the container"
-
