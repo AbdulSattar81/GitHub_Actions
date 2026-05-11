@@ -9,15 +9,16 @@ The flow of GitHub Actions is as follows:
 		 Workflow
 		    |
 		    |
-		   Jobs
+		   Jobs (one or more jobs that run in parallel by default; each gets its own fresh VM)
 		    |
 		    |
-		   Steps
+		   Steps (steps: — sequential commands inside a job. Each step is either uses: (a prebuilt action from the marketplace) or run: (a shell command))
 
 ```
 
 1. How the workflow will run?  
 A) using --> on:
+   It is what triggers the workflow (push, PR, schedule, manual, etc.)
 
 2. When will it run?  
 A) Whenever I push the code.
@@ -27,7 +28,9 @@ A) branches: [main]
 
 4. Where does jobs run?  
 A) By default GitHub Actions gives Runners(servers where jobs run)  
-   Every job needs a seperate runners, now this is called "Parallelism".  
+   Every job needs a seperate runners, now this is called "Parallelism". 
+   for example:
+   		runs-on: — which OS image (ubuntu-latest, windows-latest, macos-latest) 
 ```
 runs-on: ubuntu-latest
 ```
@@ -39,6 +42,7 @@ Runners are 2 types:
 Every Month we get 2,000 mins/month github runners for free.
 
 5. how to set a Manual click (continuous delivery) workflow.
+A)
 ```
 on:
   workflow-dispatch:
