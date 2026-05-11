@@ -1,4 +1,4 @@
-#Overview of GitHub Actions:
+##Overview of GitHub Actions:
 
 The github actions file is written in .yml file. 
 Path of the file should be =repository-name/.github/workflows/file-name.yml
@@ -6,7 +6,7 @@ Path of the file should be =repository-name/.github/workflows/file-name.yml
 ```
 The flow of GitHub Actions is as follows:
 
-		Workflow
+		 Workflow
 		    |
 		    |
 		   Jobs
@@ -16,23 +16,25 @@ The flow of GitHub Actions is as follows:
 
 ```
 
-1. How the workflow will run?
+1. How the workflow will run?  
 A) using --> on:
 
-2. When will it run?
+2. When will it run?  
 A) Whenever I push the code.
 
-3. Mention on which branch you will push so that the workflow runs.
+3. Mention on which branch you will push so that the workflow runs.  
 A) branches: [main]
 
-4. Where does jobs run?
-A) By default GitHub Actions gives Runners(servers where jobs run)
-   Every jobs need a runner.
-   Every job needs a seperate runners, now this is called "Parallelism".
+4. Where does jobs run?  
+A) By default GitHub Actions gives Runners(servers where jobs run)  
+   Every job needs a seperate runners, now this is called "Parallelism".  
+```
+runs-on: ubuntu-latest
+```
 
 Runners are 2 types:
-- GitHub Runners {it has few limitations}
-- Self-Hosted Runners {such as EC2}
+- GitHub Runners (it has few limitations)
+- Self-Hosted Runners (such as EC2)
 
 Every Month we get 2,000 mins/month github runners for free.
 
@@ -42,4 +44,30 @@ on:
   workflow-dispatch:
 ```
 
+##Trigger  
+In place of tirgger we mention paths in .yml file. triggers are also called as filters.  
+
+Whenever there is any change in index.html file, the workflow gets triggered and runs.  
+
+```
+on:  
+  push:
+    branches: [main]
+    
+    paths:'**.html'
+```
+
+
+Automated tests are nothing but Actions.  
+Automated test = Actions  
+
+#To clone a repository
+```
+uses: actions/checkout@v4
+```
+
+#To make website for free on GitHub we use github pages.
+```
+uses: actions/configure-pages@v4
+```
 
