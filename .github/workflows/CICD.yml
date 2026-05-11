@@ -2,6 +2,7 @@ name: CICD
 
 on:
   workflow_dispatch:
+  paths: '**.html'
 
 jobs:
   code:
