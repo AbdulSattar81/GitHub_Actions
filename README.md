@@ -75,3 +75,7 @@ uses: actions/checkout@v4
 uses: actions/configure-pages@v4
 ```
 
+Go to repository settings --> inside Code and automation select Actions --> Runners --> New sel-hosted runners (using sef-hosted runner in public repository is not recommended) --> select runner & architecture (x86) --> Execite the below commands one-by-one in your instance (ec2 insatnce) --> unzip the tar.gz file --> configure(copy and paste the command in you instance) --> give a name to the runner in prompted thing in you instance and give a label (eg: such as runs-on, self--hosted, dev, prod) --> work folder is a folder where all the files, artifacts are stored in runners folder --> ./run.sh
+
+you are all set and assign a job(deploy) i,e. ready to run a workflow on that runner.
+
