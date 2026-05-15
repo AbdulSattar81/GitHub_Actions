@@ -1,8 +1,7 @@
 name: Python Matrix
 
 on:
-    push:
-        branches: [main]
+   workflow_call:
 
 jobs: 
     validate:
