@@ -1,484 +1,88 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PlayMatch</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <main class="app-shell">
-      <!-- HERO -->
-      <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Indoor and outdoor sports network</p>
-          <h1>PlayMatch</h1>
-          <p class="tagline">Find nearby people who want to play the same sport, at the same pace, when you are free. <em>Now with smart matching, messaging, and scheduling.</em></p>
-
-          <div class="hero-controls">
-            <label class="persona-control">
-              <span>Logged in as</span>
-              <select id="personaSelect" aria-label="Switch persona"></select>
-            </label>
-            <button class="secondary" id="detectLocation" type="button">Use Location</button>
-            <span class="hero-meta" id="heroLocation">Location off</span>
-          </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Zero To Hero</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #e0e0e0;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 640px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #00d2ff, #7b2ff7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .badge {
+            display: inline-block;
+            margin: 1rem 0 2rem;
+            padding: 0.4rem 1.2rem;
+            border: 1px solid #7b2ff7;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            color: #c4b5fd;
+            letter-spacing: 0.05em;
+        }
+        .cards {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem 1.8rem;
+            min-width: 150px;
+            flex: 1;
+        }
+        .card span {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #9ca3af;
+            margin-bottom: 0.4rem;
+        }
+        .card strong {
+            font-size: 1.25rem;
+            color: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DevOps Zero To Hero</h1>
+        <div class="badge">Josh Batch 10</div>
+        <div class="cards">
+            <div class="card">
+                <span>Framework</span>
+                <strong>Flask 3.1</strong>
+            </div>
+            <div class="card">
+                <span>Runtime</span>
+                <strong>Python 3.14</strong>
+            </div>
+            <div class="card">
+                <span>Deploy</span>
+                <strong>AWS ECS</strong>
+            </div>
         </div>
-
-        <div class="hero-right">
-          <div class="hero-card" aria-label="Today match summary">
-            <span class="hero-icon" aria-hidden="true">⚽</span>
-            <div>
-              <strong id="heroCount">0</strong>
-              <span>active players</span>
-            </div>
-          </div>
-
-          <!-- Notification bell -->
-          <div class="bell-wrap">
-            <button class="bell-button" id="bellButton" type="button" aria-label="Notifications">
-              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                <path fill="currentColor" d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 0 0 2 2zm6-6V11a6 6 0 1 0-12 0v5l-2 2v1h16v-1l-2-2z"/>
-              </svg>
-              <span class="bell-badge" id="bellBadge"></span>
-            </button>
-            <div class="notifications-panel" id="notificationsPanel">
-              <header>
-                <strong>Notifications</strong>
-                <button class="text-button" id="clearNotifications" type="button">Clear all</button>
-              </header>
-              <div id="notificationsList"></div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <!-- TABS -->
-      <nav class="tabs" aria-label="App sections">
-        <button class="tab is-active" data-tab="discover" type="button">Discover</button>
-        <button class="tab" data-tab="create"   type="button">Profile</button>
-        <button class="tab" data-tab="matches"  type="button">Matches</button>
-        <button class="tab" data-tab="messages" type="button">Messages</button>
-        <button class="tab" data-tab="calendar" type="button">Calendar</button>
-        <button class="tab" data-tab="network"  type="button">Network</button>
-        <button class="tab" data-tab="courts"   type="button">Courts</button>
-      </nav>
-
-      <section class="workspace">
-        <!-- FILTERS SIDEBAR -->
-        <aside class="filters" aria-label="Player filters">
-          <section class="panel">
-            <div class="panel-title">
-              <h2>Find Players</h2>
-              <button class="icon-button" id="resetFilters" type="button" title="Reset filters" aria-label="Reset filters">↺</button>
-            </div>
-
-            <label class="field">
-              Sort by
-              <select id="sortByFilter">
-                <option value="match">Best match</option>
-                <option value="distance">Distance</option>
-                <option value="rating">Rating</option>
-              </select>
-            </label>
-
-            <label class="field">
-              Sport
-              <select id="sportFilter"><option value="All">All sports</option></select>
-            </label>
-
-            <label class="field">
-              Type
-              <select id="typeFilter">
-                <option value="All">Indoor or outdoor</option>
-                <option value="Indoor">Indoor</option>
-                <option value="Outdoor">Outdoor</option>
-              </select>
-            </label>
-
-            <label class="field">
-              Skill level
-              <select id="levelFilter">
-                <option value="All">Any level</option>
-                <option>Beginner</option>
-                <option>Casual</option>
-                <option>Intermediate</option>
-                <option>Advanced</option>
-              </select>
-            </label>
-
-            <label class="field">
-              Min rating
-              <select id="minRatingFilter">
-                <option value="0">Any rating</option>
-                <option value="3">★ 3.0+</option>
-                <option value="4">★ 4.0+</option>
-                <option value="4.5">★ 4.5+</option>
-              </select>
-            </label>
-
-            <label class="field">
-              Max distance (km)
-              <input id="maxDistanceKmFilter" type="number" min="0" step="1" placeholder="e.g. 10">
-            </label>
-
-            <label class="field">
-              Area
-              <input id="areaFilter" type="search" placeholder="City, neighborhood, or venue">
-            </label>
-
-            <label class="field">
-              Search
-              <input id="textFilter" type="search" placeholder="Name, sport, notes">
-            </label>
-          </section>
-
-          <section class="panel">
-            <div class="panel-title"><h2>Quick Stats</h2></div>
-            <div class="stats-grid" id="statsGrid"></div>
-          </section>
-        </aside>
-
-        <!-- CONTENT -->
-        <section class="content">
-
-          <!-- DISCOVER -->
-          <section class="tab-page is-visible" id="discover">
-            <div class="section-head">
-              <div>
-                <h2>People Ready To Play</h2>
-                <p id="resultSummary">Showing all players</p>
-              </div>
-              <button class="primary" id="goCreate" type="button">Edit Profile</button>
-            </div>
-            <div class="player-grid" id="playerGrid"></div>
-          </section>
-
-          <!-- PROFILE -->
-          <section class="tab-page" id="create">
-            <div class="grid two">
-              <form class="panel profile-form" id="profileForm">
-                <div class="panel-title">
-                  <h2>Your Player Profile</h2>
-                  <button class="secondary" id="fillSample" type="button">Sample</button>
-                </div>
-
-                <label class="field">
-                  Name
-                  <input id="nameInput" type="text" autocomplete="name" required>
-                </label>
-
-                <label class="field">
-                  Sport
-                  <input id="sportInput" type="text" list="sportOptions" required placeholder="Carrom Board, Soccer, Tennis">
-                </label>
-                <datalist id="sportOptions"></datalist>
-
-                <div class="form-row">
-                  <label class="field">
-                    Type
-                    <select id="typeInput"><option>Indoor</option><option>Outdoor</option></select>
-                  </label>
-                  <label class="field">
-                    Skill
-                    <select id="levelInput">
-                      <option>Beginner</option>
-                      <option selected>Casual</option>
-                      <option>Intermediate</option>
-                      <option>Advanced</option>
-                    </select>
-                  </label>
-                </div>
-
-                <label class="field">
-                  Area or venue
-                  <input id="areaInput" type="text" required placeholder="Downtown courts, community center">
-                </label>
-
-                <label class="field">
-                  Availability
-                  <input id="availabilityInput" type="text" required placeholder="Weeknights after 6, Saturday morning">
-                </label>
-
-                <label class="field">
-                  Contact
-                  <input id="contactInput" type="text" required placeholder="Phone, email, or social handle">
-                </label>
-
-                <label class="field">
-                  Notes
-                  <textarea id="notesInput" rows="4" placeholder="What kind of game are you looking for?"></textarea>
-                </label>
-
-                <div class="form-row">
-                  <button class="secondary" type="button" id="useMyLocationProfile">📍 Attach My Location</button>
-                  <span class="location-status muted" id="locationStatus"></span>
-                </div>
-
-                <button class="primary" type="submit">Publish Profile</button>
-              </form>
-
-              <section class="panel">
-                <div class="panel-title"><h2>Profile Preview</h2></div>
-                <div id="profilePreview" class="preview-card"></div>
-              </section>
-            </div>
-          </section>
-
-          <!-- MATCHES -->
-          <section class="tab-page" id="matches">
-            <div class="section-head">
-              <div>
-                <h2>Match Requests</h2>
-                <p>Approve, decline, and schedule games.</p>
-              </div>
-            </div>
-
-            <div class="match-grid">
-              <section class="panel">
-                <div class="panel-title"><h2>Incoming</h2></div>
-                <div id="incomingRequests"></div>
-              </section>
-              <section class="panel">
-                <div class="panel-title"><h2>Outgoing</h2></div>
-                <div id="outgoingRequests"></div>
-              </section>
-            </div>
-
-            <section class="panel">
-              <div class="panel-title"><h2>Active Matches</h2></div>
-              <div class="approved-grid" id="approvedMatches"></div>
-            </section>
-
-            <section class="panel">
-              <div class="panel-title"><h2>Scheduled Games</h2></div>
-              <div id="scheduledList"></div>
-            </section>
-          </section>
-
-          <!-- MESSAGES -->
-          <section class="tab-page" id="messages">
-            <div class="section-head">
-              <div>
-                <h2>Messages</h2>
-                <p>Chat with your matched players.</p>
-              </div>
-            </div>
-            <div class="messages-layout">
-              <aside class="threads-pane" id="threadsList"></aside>
-              <section class="message-pane" id="messageView">
-                <div class="empty-state">Select a conversation.</div>
-              </section>
-            </div>
-          </section>
-
-          <!-- CALENDAR -->
-          <section class="tab-page" id="calendar">
-            <div class="section-head">
-              <div>
-                <h2>Calendar</h2>
-                <p>Scheduled matches at a glance.</p>
-              </div>
-              <div class="cal-nav">
-                <button class="secondary" id="calPrev" type="button">‹</button>
-                <button class="secondary" id="calToday" type="button">Today</button>
-                <button class="secondary" id="calNext" type="button">›</button>
-              </div>
-            </div>
-            <section class="panel">
-              <div class="cal-header">
-                <strong id="calendarLabel">—</strong>
-              </div>
-              <div class="cal-grid" id="calendarGrid"></div>
-            </section>
-          </section>
-
-          <!-- NETWORK -->
-          <section class="tab-page" id="network">
-            <div class="section-head">
-              <div>
-                <h2>Your Network</h2>
-                <p id="savedSummary">Friends, saved players, and blocks.</p>
-              </div>
-            </div>
-
-            <section class="panel">
-              <div class="panel-title"><h2>Friends</h2></div>
-              <div class="player-grid" id="friendsGrid"></div>
-            </section>
-
-            <section class="panel">
-              <div class="panel-title"><h2>Saved Players</h2></div>
-              <div class="player-grid" id="savedGrid"></div>
-            </section>
-
-            <section class="panel">
-              <div class="panel-title"><h2>Blocked</h2></div>
-              <div id="blockedList"></div>
-            </section>
-          </section>
-
-          <!-- COURTS -->
-          <section class="tab-page" id="courts">
-            <div class="section-head">
-              <div>
-                <h2>Nearby Courts</h2>
-                <p id="courtsSummary">Turn on location to sort by distance.</p>
-              </div>
-            </div>
-            <div class="courts-grid" id="courtsGrid"></div>
-          </section>
-
-        </section>
-      </section>
-    </main>
-
-    <!-- ===== PLAYER CARD TEMPLATE ===== -->
-    <template id="playerTemplate">
-      <article class="player-card">
-        <button class="menu-button" type="button" aria-label="More actions">⋯</button>
-        <div class="card-menu">
-          <button class="menu-friend" type="button">Add friend</button>
-          <button class="menu-report" type="button">Report</button>
-          <button class="menu-block" type="button">Block</button>
-        </div>
-
-        <div class="card-top">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <h3></h3>
-            <p class="area"></p>
-          </div>
-        </div>
-
-        <div class="sport-line">
-          <span class="sport-icon" aria-hidden="true"></span>
-          <strong class="sport"></strong>
-        </div>
-
-        <div class="meta-row"></div>
-
-        <div class="chips"></div>
-        <p class="availability"></p>
-        <p class="notes"></p>
-
-        <div class="card-actions">
-          <button class="secondary save-button" type="button"></button>
-          <button class="primary request-button" type="button">Request Match</button>
-        </div>
-      </article>
-    </template>
-
-    <!-- ===== MODALS ===== -->
-
-    <!-- Schedule modal -->
-    <div class="modal" id="scheduleModal" role="dialog" aria-modal="true" aria-labelledby="scheduleTitle">
-      <div class="modal-backdrop"></div>
-      <div class="modal-body">
-        <header class="modal-head">
-          <h2 id="scheduleTitle">Schedule a match with <span id="scheduleWith"></span></h2>
-          <button class="modal-close" type="button" aria-label="Close">✕</button>
-        </header>
-        <form id="scheduleForm">
-          <input type="hidden" id="scheduleWithId">
-
-          <label class="field">
-            Sport
-            <select id="scheduleSport"></select>
-          </label>
-
-          <label class="field">
-            Court
-            <select id="scheduleCourt"></select>
-          </label>
-
-          <div class="form-row">
-            <label class="field">
-              When
-              <input id="scheduleWhen" type="datetime-local" required>
-            </label>
-            <label class="field">
-              Duration (minutes)
-              <input id="scheduleDuration" type="number" min="15" step="15" value="60">
-            </label>
-          </div>
-
-          <button class="primary" type="submit">Confirm Schedule</button>
-        </form>
-      </div>
     </div>
-
-    <!-- Review modal -->
-    <div class="modal" id="reviewModal" role="dialog" aria-modal="true">
-      <div class="modal-backdrop"></div>
-      <div class="modal-body">
-        <header class="modal-head">
-          <h2>Rate your match with <span id="reviewTarget"></span></h2>
-          <button class="modal-close" type="button" aria-label="Close">✕</button>
-        </header>
-        <form id="reviewForm">
-          <input type="hidden" id="reviewTargetId">
-          <input type="hidden" id="reviewMatchId">
-          <input type="hidden" id="reviewRating" value="0">
-
-          <div class="field">
-            Rating
-            <div class="star-row">
-              <button class="star-input" type="button" data-value="1">★</button>
-              <button class="star-input" type="button" data-value="2">★</button>
-              <button class="star-input" type="button" data-value="3">★</button>
-              <button class="star-input" type="button" data-value="4">★</button>
-              <button class="star-input" type="button" data-value="5">★</button>
-            </div>
-          </div>
-
-          <label class="field">
-            Review (optional)
-            <textarea id="reviewText" rows="4" placeholder="What was the experience like?"></textarea>
-          </label>
-
-          <button class="primary" type="submit">Submit Review</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Report modal -->
-    <div class="modal" id="reportModal" role="dialog" aria-modal="true">
-      <div class="modal-backdrop"></div>
-      <div class="modal-body">
-        <header class="modal-head">
-          <h2>Report <span id="reportTarget"></span></h2>
-          <button class="modal-close" type="button" aria-label="Close">✕</button>
-        </header>
-        <form id="reportForm">
-          <input type="hidden" id="reportTargetId">
-
-          <label class="field">
-            Reason
-            <select id="reportReason" required>
-              <option value="">Select a reason…</option>
-              <option>Harassment or abuse</option>
-              <option>Inappropriate behavior</option>
-              <option>Fake profile or impersonation</option>
-              <option>Spam or scam</option>
-              <option>Safety concern</option>
-              <option>Other</option>
-            </select>
-          </label>
-
-          <label class="field">
-            Details
-            <textarea id="reportDetails" rows="4" placeholder="What happened?"></textarea>
-          </label>
-
-          <button class="primary" type="submit">Submit Report</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script src="app.js"></script>
-  </body>
+</body>
 </html>
