@@ -3,7 +3,7 @@ name: Hello
 
 #runs on a trigger
 on:
-  workflow_call:
+  workflow_dispatch:
 
 #These are jobs inside the workflow
 jobs:
